@@ -28,7 +28,7 @@ router.get("/", (req, res, next) => {
             request: {
               type: "GET",
               description: "GET SINGLE USER",
-              url: req.get('host')+'/user/'+ user._id 
+              url: req.get('host')+'/user/'+ doc._id 
             }
           };
         })
@@ -73,7 +73,7 @@ router.post("/", (req, res, next) => {
         createdUser: result,
             request: {
                 type: 'GET',
-                url: req.get('host')+'/user/'+ user._id 
+                url: req.get('host')+'/user/'+ result._id 
             }
       });
     })
@@ -126,7 +126,7 @@ router.put("/update/:userId", (req, res, next) => {
           message: 'User updated',
           request: {
               type: 'GET',
-              url: req.get('host')+'/user'+ user._id 
+              url: req.get('host')+'/user'+ result._id 
           }
       });
     })
