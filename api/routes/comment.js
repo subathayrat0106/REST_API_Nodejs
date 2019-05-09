@@ -55,7 +55,7 @@ router.get("/user/:id/comment/:commentId", (req, res, next) => {
             comment: doc,
             request: {
                 type: 'POST',
-                url: 'http://localhost:3000/'+req.params.id +'/comment',
+                url: req.get('host')+'/user/'+req.params.id +'/comment',
                 body:{
                     title:'String',
                     content:'String'
@@ -87,7 +87,7 @@ router.put('/user/:id/comment/update/:commentId/', (req, res, next) => {
           message: 'Comment updated',
           request: {
               type: 'GET',
-              url: 'http://localhost:3000/user/' + req.params.id +'/comment/' + id
+              url: req.get('host')+'/user/'+req.params.id +'/comment/' + id
           }
       });
     })
@@ -108,7 +108,7 @@ router.delete("/user/:id/comment/delete/:commentId/", (req, res, next) => {
           message: 'comment deleted',
           request: {
             type: 'POST',
-            url: 'http://localhost:3000/'+req.params.id +'/comment',
+            url: req.get('host')+'/user/'+req.params.id +'/comment',
             body:{
                 title:'String',
                 content:'String'

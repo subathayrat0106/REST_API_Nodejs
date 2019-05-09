@@ -28,7 +28,7 @@ router.get("/", (req, res, next) => {
             request: {
               type: "GET",
               description: "GET SINGLE USER",
-              url: "http://localhost:3000/user/" + doc._id
+              url: req.get('host')+'/user/'+ user._id 
             }
           };
         })
@@ -73,7 +73,7 @@ router.post("/", (req, res, next) => {
         createdUser: result,
             request: {
                 type: 'GET',
-                url: "http://localhost:3000/user/" + result._id
+                url: req.get('host')+'/user/'+ user._id 
             }
       });
     })
@@ -98,7 +98,7 @@ router.get("/:userId", (req, res, next) => {
             user: doc,
             request: {
                 type: 'GET',
-                url: 'http://localhost:3000/user'
+                url: req.get('host')+'/user'
             }
         });
       } else {
@@ -126,7 +126,7 @@ router.put("/update/:userId", (req, res, next) => {
           message: 'User updated',
           request: {
               type: 'GET',
-              url: 'http://localhost:3000/user/' + id
+              url: req.get('host')+'/user'+ user._id 
           }
       });
     })
@@ -147,7 +147,7 @@ router.delete("/delete/:userId", (req, res, next) => {
           message: 'user deleted',
           request: {
               type: 'POST',
-              url: 'http://localhost:3000/user',
+              url: req.get('host')+'/user',
               body: { _id:mongoose.Schema.Types.ObjectId,
                 first_name:'String',
                 last_name:'String',
