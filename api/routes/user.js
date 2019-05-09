@@ -113,7 +113,45 @@ router.get("/:userId", (req, res, next) => {
     });
 });
 
-router.put("/update/:userId", (req, res, next) => {
+
+router.put("/update/:userId",(req,res,next)=>{
+  
+  User.update(req.params.userId,
+    {
+      $set:{
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email:req.body.email,
+        job_type:req.body.job_type,
+        address:{
+      stree_address:req.body.address.stree_address,
+      city:req.body.address.city,
+      state:req.body.address.state,
+      zip_code:req.body.address.zip_code,
+    }
+      }
+    })
+    .exec()
+    .then(result => {
+      res.status(200).json({
+          message: 'User updated',
+          request: {
+              type: 'GET',
+              url: req.get('host')+'/user/'+ req.params.userId
+          }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+ 
+})
+
+
+router.patch("/patch/:userId", (req, res, next) => {
   const id = req.params.userId;
   const updateOps = {};
   for (const ops of req.body) {
@@ -137,6 +175,8 @@ router.put("/update/:userId", (req, res, next) => {
       });
     });
 });
+
+
 
 router.delete("/delete/:userId", (req, res, next) => {
   const id = req.params.userId;

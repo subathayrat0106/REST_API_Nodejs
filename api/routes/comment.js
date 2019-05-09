@@ -75,12 +75,12 @@ router.get("/user/:id/comment/:commentId", (req, res, next) => {
 });
 
 router.put('/user/:id/comment/update/:commentId/', (req, res, next) => {
-  const id = req.params.commentId;
-  const updateOps = {};
-  for (const ops of req.body) {
-    updateOps[ops.propName] = ops.value;
-  }
-  Comment.findByIdAndUpdate({ _id: id }, { $set: updateOps })
+  Comment.findByIdAndUpdate(req.params.commentId, 
+    { $set: {
+        title:req.body.title,
+        content:req.body.content
+      }
+     })
     .exec()
     .then(result => {
       res.status(200).json({

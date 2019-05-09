@@ -14,11 +14,16 @@ router.get("/", (req, res, next) => {
         orders: docs.map(doc => {
           return {
             _id: doc._id,
-            product: doc.product,
-            quantity: doc.quantity,
+            name:doc.name,
+            suffix:doc.suffix,
+            url:doc.url,
+            finance:{
+              account_name:doc.finance.account_name,
+              account_number:doc.finance.account_number
+            },
             request: {
               type: "GET",
-              url: "http://localhost:3000/orders/" + doc._id
+              url: req.get('host')+'/company'+ doc._id 
             }
           };
         })
@@ -32,33 +37,27 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
-  Company.findById(req.body.productId)
-    .then(product => {
-      if (!product) {
-        return res.status(404).json({
-          message: "Product not found"
-        });
-      }
-      const order = new Order({
-        _id: mongoose.Types.ObjectId(),
-        quantity: req.body.quantity,
-        product: req.body.productId
-      });
-      return order.save();
-    })
+  const company = new Company({
+    _id: new mongoose.Types.ObjectId(),
+    name:req.body.name,
+    suffix:req.body.suffix,
+    url:req.body.url,
+    finance:{
+      account_name:req.body.finance.account_name,
+      account_number:req.body.finance.account_number
+    },
+  });
+  company
+    .save()
     .then(result => {
       console.log(result);
       res.status(201).json({
-        message: "Order stored",
-        createdOrder: {
-          _id: result._id,
-          product: result.product,
-          quantity: result.quantity
-        },
-        request: {
-          type: "GET",
-          url: "http://localhost:3000/orders/" + result._id
-        }
+        message: "Created company successfully",
+        createdUser: result,
+            request: {
+                type: 'GET',
+                url: req.get('host')+'/company/'+ result._id 
+            }
       });
     })
     .catch(err => {
@@ -69,41 +68,106 @@ router.post("/", (req, res, next) => {
     });
 });
 
-router.get("/:orderId", (req, res, next) => {
-  Company.findById(req.params.orderId)
-    .populate('product')
+router.get("/:companyId", (req, res, next) => {
+  const id = req.params.companyId;
+  Company.findById(id)
+    .select("-__v")
     .exec()
-    .then(order => {
-      if (!order) {
-        return res.status(404).json({
-          message: "Order not found"
+    .then(doc => {
+      console.log("From database", doc);
+      if (doc) {
+        res.status(200).json({
+            company: doc,
+            request: {
+                type: 'GET',
+                url: req.get('host')+'/company'
+            }
         });
+      } else {
+        res
+          .status(404)
+          .json({ message: "No company found for provided ID" });
       }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+
+router.put("/update/:companyId",(req,res,next)=>{
+  Company.updateOne(req.param.companyId,{
+    $set:{
+      name:req.body.name,
+    suffix:req.body.suffix,
+    url:req.body.url,
+    finance:{
+      account_name:req.body.finance.account_name,
+      account_number:req.body.finance.account_number
+    },
+    }
+  })
+  .exec()
+    .then(result => {
       res.status(200).json({
-        order: order,
-        request: {
-          type: "GET",
-          url: "http://localhost:3000/orders"
-        }
+          message: 'Company updated',
+          request: {
+              type: 'GET',
+              url: req.get('host')+'/company/'+ req.param.companyId
+          }
       });
     })
     .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+})
+
+
+router.patch("/patch/:companyId", (req, res, next) => {
+  const id = req.params.companyId;
+  const updateOps = {};
+  for (const ops of req.body) {
+    updateOps[ops.propName] = ops.value;
+  }
+  Company.update({ _id: id }, { $set: updateOps })
+    .exec()
+    .then(result => {
+      res.status(200).json({
+          message: 'Company updated',
+          request: {
+              type: 'GET',
+              url: req.get('host')+'/company/'+ id
+          }
+      });
+    })
+    .catch(err => {
+      console.log(err);
       res.status(500).json({
         error: err
       });
     });
 });
 
-router.delete("/:orderId", (req, res, next) => {
-  Company.remove({ _id: req.params.orderId })
+router.delete("/delete/:companyId", (req, res, next) => {
+  Company.remove({ _id: req.params.companyId })
     .exec()
     .then(result => {
       res.status(200).json({
-        message: "Order deleted",
+        message: "Company deleted",
         request: {
           type: "POST",
-          url: "http://localhost:3000/orders",
-          body: { productId: "ID", quantity: "Number" }
+          url: req.get('host')+'/company',
+          body: {  
+            name:'String',
+            suffix:'String',
+            url:'String',
+            finance:{
+              account_name:'String',
+              account_number:'Number' }
+            }
         }
       });
     })
