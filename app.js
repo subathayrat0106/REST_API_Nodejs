@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 
 const userRoutes = require('./api/routes/user');
 const commentRoutes = require('./api/routes/comment')
-const companyRoutes = require('./api/routes/company')
+const companyRoutes = require('./api/routes/company');
+const adminRoutes = require('./api/routes/admin')
 
 mongoose.connect('mongodb+srv://subat1988:'+process.env.MONGO_ATLAS_PW+'@rest-api-nodejs-olmgn.mongodb.net/test?retryWrites=true',{useNewUrlParser: true});
 
@@ -28,8 +29,8 @@ app.use((req ,res, next)=>{
 
 app.use('/user',userRoutes);
 app.use(commentRoutes);
-app.use('/company',companyRoutes)
-//app.use('/company',companyRoutes);
+app.use('/company',companyRoutes);
+app.use("/admin", adminRoutes);
 
 app.use((req,res,next)=>{
     const error = new Error('Not found');
