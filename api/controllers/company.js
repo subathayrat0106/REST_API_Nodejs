@@ -95,7 +95,7 @@ exports.company_get_one = (req,res,next)=>{
 }
 
 exports.company_update_all = (req,res,next)=>{
-    Company.updateOne(req.param.companyId,{
+    Company.update({_id:req.params.companyId},{
         $set:{
           name:req.body.name,
         suffix:req.body.suffix,
@@ -112,7 +112,7 @@ exports.company_update_all = (req,res,next)=>{
               message: 'Company updated',
               request: {
                   type: 'GET',
-                  url: req.get('host')+'/company/'+ req.param.companyId
+                  url: req.get('host')+'/company/'+ req.params.companyId
               }
           });
         })
