@@ -19,7 +19,7 @@ exports.user_get_all =(req,res,next)=>{
             email:doc.email,
             job_type:doc.job_type,
             address:{
-              stret_address:doc.address.street_address,
+              street_address:doc.address.street_address,
               city:doc.address.city,
               state:doc.address.state,
               zip_code:doc.address.zip_code
@@ -187,7 +187,7 @@ exports.user_delete_one = (req,res,next)=>{
                   email:'String',
                   job_type:'String',
                   address:{
-                      stree_address:'String',
+                      street_address:'String',
                       city:'String',
                       state:'String',
                       zip_code:'Number'

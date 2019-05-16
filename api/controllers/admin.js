@@ -25,13 +25,13 @@ exports.admin_signup = (req, res, next) => {
               email: req.body.email,
               password: hash
             });
-            console.log(admin);
             admin
               .save()
               .then(result => {
                 console.log(result);
                 res.status(201).json({
-                  message: "Admin created"
+                  message: "Admin created",
+                  _id:result._id
                 });
               })
               .catch(err => {

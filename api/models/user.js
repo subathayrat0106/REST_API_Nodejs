@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     email:{type:String , required:true},
     job_type:String,
     address:{
-        stree_address:String,
+        street_address:String,
         city:String,
         state:String,
         zip_code:Number
