@@ -113,7 +113,7 @@ exports.user_get_one = (req,res,next) =>{
 }
 
 exports.user_update_all = (req,res,next)=>{
-    User.update(req.params.userId,
+    User.findByIdAndUpdate(req.params.userId,
         {
           $set:{
             first_name: req.body.first_name,
@@ -152,7 +152,7 @@ exports.user_update_one = (req,res,next)=>{
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  User.update({ _id: id }, { $set: updateOps })
+  User.findByIdAndUpdate({ _id: id }, { $set: updateOps })
     .exec()
     .then(result => {
       res.status(200).json({
