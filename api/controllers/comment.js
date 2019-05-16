@@ -30,6 +30,7 @@ exports.comment_post_one = (req,res,next)=>{
                     user.save();
                     console.log(user);
                     res.status(200).json({
+                        _id: comment._id,
                         message:"comment created successfully",
                     })
                 }
