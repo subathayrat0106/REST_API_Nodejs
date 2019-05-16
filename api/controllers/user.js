@@ -19,7 +19,7 @@ exports.user_get_all =(req,res,next)=>{
             email:doc.email,
             job_type:doc.job_type,
             address:{
-              stree_address:doc.address.stree_address,
+              stret_address:doc.address.street_address,
               city:doc.address.city,
               state:doc.address.state,
               zip_code:doc.address.zip_code
@@ -56,7 +56,7 @@ exports.users_create_one = (req,res,next)=>{
         email:req.body.email,
         job_type:req.body.job_type,
         address:{
-          stree_address:req.body.address.stree_address,
+          street_address:req.body.address.street_address,
           city:req.body.address.city,
           state:req.body.address.state,
           zip_code:req.body.address.zip_code,
@@ -121,7 +121,7 @@ exports.user_update_all = (req,res,next)=>{
             email:req.body.email,
             job_type:req.body.job_type,
             address:{
-          stree_address:req.body.address.stree_address,
+          street_address:req.body.address.street_address,
           city:req.body.address.city,
           state:req.body.address.state,
           zip_code:req.body.address.zip_code,
