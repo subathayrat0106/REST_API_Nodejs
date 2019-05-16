@@ -25,6 +25,7 @@ exports.admin_signup = (req, res, next) => {
               email: req.body.email,
               password: hash
             });
+            console.log(admin);
             admin
               .save()
               .then(result => {

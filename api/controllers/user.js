@@ -11,7 +11,7 @@ exports.user_get_all =(req,res,next)=>{
     .then(docs => {
       const response = {
         count: docs.length,
-        uesr: docs.map(doc => {
+        user: docs.map(doc => {
           return {
             _id: doc._id,
             first_name: doc.first_name,
