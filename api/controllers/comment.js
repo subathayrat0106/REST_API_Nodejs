@@ -29,7 +29,7 @@ exports.comment_post_one = (req,res,next)=>{
                     user.comments.push(comment);
                     user.save();
                     console.log(user);
-                    res.status(200).json({
+                    res.status(201).json({
                         _id: comment._id,
                         message:"comment created successfully",
                     })
@@ -71,7 +71,7 @@ exports.comment_get_one = (req,res,next)=>{
 }
 
 exports.comment_update_all = (req,res,next)=>{
-    Comment.findByIdAndUpdate(req.params.commentId, 
+    Comment.findByIdAndUpdate({_id:req.params.commentId}, 
         { $set: {
             title:req.body.title,
             content:req.body.content
@@ -83,7 +83,7 @@ exports.comment_update_all = (req,res,next)=>{
               message: 'Comment updated',
               request: {
                   type: 'GET',
-                  url: req.get('host')+'/user/'+req.params.id +'/comment/' + id
+                  url: req.get('host')+'/user/'+req.params.id +'/comment/' + result._id
               }
           });
         })
